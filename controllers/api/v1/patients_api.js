@@ -1,47 +1,42 @@
-// const Post = require('../../../models/post');
-// const Comment = require('../../../models/comment');
-// module.exports.index = async function(req, res){
+const Patient = require("../../../models/patient");
+const Report = require("../../../models/report");
+module.exports.register = async function (req, res) {
+  try {
+    Patient.findOne({ phone: req.body.phone }, function (err, patient) {
+      if (!patient) {
+        Patient.create(req.body, function (err, user) {
+          return res.json(200, {
+            message: "Patient Registered Successfully",
+          });
+        });
+      } else {
+        return res.json(400, { message: "Patient already present" });
+      }
+    });
+  } catch (err) {
+    return res.json(500, {
+      message: "Internal Server Error",
+    });
+  }
+};
 
-//     let posts = await Post.find({})
-//         .sort('-createdAt')
-//         .populate('user')
-//         .populate({
-//             path: 'comments',
-//             populate: {
-//                 path: 'user'
-//             }
-//         });
+module.exports.createReport = async function (req, res) {
+  try {
+    // console.log(req.params.id);
 
-//     return res.json(200, {
-//         message: "List of posts",
-//         posts: posts
-//     })
-// }
+    report = await Report.create({
+      patient: req.params.id,
+      doctor: req.body.doctor,
+      status: req.body.status,
+    });
+    return res.json(200, {
+      message: "Report created Successfully",
+    });
+  } catch (err) {
+    console.log(err);
 
-// module.exports.destroy = async function(req, res){
-
-//     try{
-//         let post = await Post.findById(req.params.id);
-
-//         if (post.user == req.user.id){
-//             post.remove();
-
-//             await Comment.deleteMany({post: req.params.id});
-
-//             return res.json(200, {
-//                 message: "Post and associated comments deleted successfully!"
-//             });
-//         }else{
-//             return res.json(401, {
-//                 message: "You cannot delete this post!"
-//             });
-//         }
-
-//     }catch(err){
-//         console.log('********', err);
-//         return res.json(500, {
-//             message: "Internal Server Error"
-//         });
-//     }
-
-// }
+    return res.json(500, {
+      message: "Internal Server Error",
+    });
+  }
+};
