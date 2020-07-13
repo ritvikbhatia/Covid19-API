@@ -40,3 +40,23 @@ module.exports.createReport = async function (req, res) {
     });
   }
 };
+module.exports.allReport = async function (req, res) {
+  try {
+    // console.log(req.params.id);
+
+    rep = await Report.find({ patient: req.params.id })
+      .populate("doctor")
+      .populate("patient");
+    // console.log(rep);
+
+    return res.json(200, {
+      message: rep,
+    });
+  } catch (err) {
+    console.log(err);
+
+    return res.json(500, {
+      message: "Internal Server Error",
+    });
+  }
+};
