@@ -10,6 +10,8 @@ an API for the doctors of a Hospital which has been allocated by the govt for te
 5. nodemon
 6. jsonwebtoken
 7. Mongoose
+8. Chai
+9. Mocha
 
 # Routes
 1. /doctors/register → with username and password
